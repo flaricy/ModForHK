@@ -1,0 +1,32 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AssemblyTitle>MyFirstMod</AssemblyTitle>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <DebugType>portable</DebugType>
+    <Copyright>Copyright © 2024</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>MyFirstMod</AssemblyName>
+    <!--
+        Update this to be the `Managed` folder of your Hollow Knight install in real mods,
+        or to point to the nescessary assemblies referenced by this mod.
+    -->
+    <HollowKnightRefs>/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/</HollowKnightRefs>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/Assembly-CSharp.dll" />
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.dll" />
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll" />
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.InputModule.dll" />
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.IMGUIModule.dll" />
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.InputLegacyModule.dll" />
+    <Reference Include="/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.UI.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModClass.cs" />
+  </ItemGroup>
+  <Target Name="Build">
+    <Csc Sources="@(Compile)" References="@(Reference)" OutputAssembly="$(OutputPath)$(AssemblyTitle).dll" TargetType="Library" />
+  </Target>
+</Project>
