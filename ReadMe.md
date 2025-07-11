@@ -1,19 +1,17 @@
 # A simple Mod for Hollow Knight
 
-We may abbreviate **Hollow Knight** as **HK** in the following.
+We may abbreviate **Hollow Knight** as **HK** in the following discussion.
 
 ## Environment Dependencies
 
 1. We are based on MacOS system.
 
-2. You can 
-   - use *Mono* (`brew install mono`) and the corresponding *xbuild* command.
-   - or use *.NET*, which means you should download DotNet (from https://dotnet.microsoft.com/zh-cn/download), then you can use *dotnet build* command. 
+2. You use *.NET*, which means you should download DotNet (from https://dotnet.microsoft.com/zh-cn/download), then you can use *dotnet build* command. 
 
 3. Install Hollow Knight game.
 
 4. We need **Modding API** (https://github.com/hk-modding/api), which provides some APIs to build further mods, preparing us with a suitable developement environment. There are a few ways to achieve this.
-   -  I have tried a method but it seems unable to work (resulting in failure to open the *HK* app): download the released package, unzip it, and use the content to substitute files in `hollow_knight.app/Contents/Resources/Data/Managed/`.
+   -  I have tried this method but it seems unable to work (resulting in failure to open the *HK* app): download the released package, unzip it, and use the content to substitute files in `hollow_knight.app/Contents/Resources/Data/Managed/`.
    -  Download **Scarab** (a mod manager, from https://github.com/fifty-six/Scarab), which should implicitly overwrite some files under the `Managed/` folder.
    -  You can refer to https://prashantmohta.github.io/ModdingDocs/getting-started.html for further information.
   
@@ -21,13 +19,7 @@ We may abbreviate **Hollow Knight** as **HK** in the following.
 
 ## Usage 
 
-To compile this project, use either 
-
-```shell 
-xbuild ProjectFile.csproj 
-```
-
-or 
+To compile this project, use 
 
 ```shell 
 dotnet build ProjectFileForDotnet.csproj
