@@ -4,9 +4,11 @@
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
-    <AssemblyName>MyFirstMod</AssemblyName>
-    <RootNamespace>MyFirstMod</RootNamespace>
+    <AssemblyName>SoulInterception</AssemblyName> <!-- This is the name of the output DLL -->
+    <RootNamespace>MyMods</RootNamespace> <!-- if there is already a namespace specified in .cs file, 
+                                                   this line doesn't work -->
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <!-- 添加 Unity 和 Hollow Knight 的 DLL 作为引用 -->
@@ -41,8 +43,9 @@
     </Reference>
   </ItemGroup>
 
-  <!-- <ItemGroup>
-    <Compile Include="ModClass.cs" />
-  </ItemGroup> -->
+  <ItemGroup>
+    <!-- <Compile Include="ModClass.cs" /> -->
+    <Compile Include="neverGetSoul.cs" />
+  </ItemGroup>
 
 </Project>

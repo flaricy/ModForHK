@@ -1,12 +1,23 @@
 # A simple Mod for Hollow Knight
 
+We may abbreviate **Hollow Knight** as **HK** in the following.
+
 ## Environment Dependencies
 
 1. We are based on MacOS system.
 
-2. We need *Mono* (`brew install mono`). Then we are able to use the *xbuild* command.
+2. You can 
+   - use *Mono* (`brew install mono`) and the corresponding *xbuild* command.
+   - or use *.NET*, which means you should download DotNet (from https://dotnet.microsoft.com/zh-cn/download), then you can use *dotnet build* command. 
 
 3. Install Hollow Knight game.
+
+4. We need **Modding API** (https://github.com/hk-modding/api), which provides some APIs to build further mods, preparing us with a suitable developement environment. There are a few ways to achieve this.
+   -  I have tried a method but it seems unable to work (resulting in failure to open the *HK* app): download the released package, unzip it, and use the content to substitute files in `hollow_knight.app/Contents/Resources/Data/Managed/`.
+   -  Download **Scarab** (a mod manager, from https://github.com/fifty-six/Scarab), which should implicitly overwrite some files under the `Managed/` folder.
+   -  You can refer to https://prashantmohta.github.io/ModdingDocs/getting-started.html for further information.
+  
+
 
 ## Usage 
 
@@ -30,9 +41,18 @@ Then run the game and check if the newly added mod works fine.
 
 We **assume in the following** that operating system is **MacOS**.
 
-- Some essential dll files are put under `~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/`.
+1. Some essential dll files are put under 
+   ```~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/```.
 
-- The logging file for All mods is on `~/Library/Application Support/unity.Team Cherry.Hollow Knight/ModLog.txt`.
+2. The logging file for All mods is on ```~/Library/Application Support/unity.Team Cherry.Hollow Knight/ModLog.txt```.
+
+3. To enable directly demonstrating logging info in the game, you need to modify ```~/Library/Application Support/unity.Team Cherry.Hollow Knight/ModdingApi.GlobalSettings.json```. To be specific, change the value of following item from `false` to `true`.
+
+```json 
+  "ShowDebugLogInGame": true,
+```
+
+4. *(to be further investigated)* Simply quitting the HK app and removing some Mod files in `Managed/Mods` may not disable the already loaded mods. If that happens, try close and reopen Steam app, then HK app. 
 
 ### Essential dll reference
 
