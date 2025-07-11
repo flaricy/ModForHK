@@ -10,13 +10,19 @@
 
 ## Usage 
 
-To compile this project, use 
+To compile this project, use either 
 
 ```shell 
 xbuild ProjectFile.csproj 
 ```
 
-After that, you will get `MyFirstMod.dll` in `./bin/`. Copy this file to `/$Your Path$/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/Mods/MyFirstMod/`. You may need to create a folder named `MyFirstMod`.
+or 
+
+```shell 
+dotnet build ProjectFileForDotnet.csproj
+```
+
+After that, you will get `MyFirstMod.dll` in `bin/Debug/net472/`. Copy this file to `/$Your Path$/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/Mods/MyFirstMod/`. You may need to create a folder named `MyFirstMod`.
 
 Then run the game and check if the newly added mod works fine.
 
