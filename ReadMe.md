@@ -39,8 +39,6 @@ Then run the game and check if the newly added mod works fine.
 
 ## Notes
 
-We **assume in the following** that operating system is **MacOS**.
-
 1. Some essential dll files are put under 
    ```~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/```.
 
@@ -81,7 +79,14 @@ We **assume in the following** that operating system is **MacOS**.
 ### Project Configuration
 
 ```xml
- <Target Name="Build">
-    <Csc Sources="@(Compile)" References="@(Reference)" OutputAssembly="$(OutputPath)$(AssemblyTitle).dll" TargetType="Library" />
-  </Target>
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>YourModName</AssemblyName> <!-- This is the name of the output DLL -->
+    <RootNamespace>MyMods</RootNamespace> <!-- if there is already a namespace specified in .cs file, 
+                                                   this line doesn't work -->
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
 ```
