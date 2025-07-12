@@ -4,6 +4,8 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MyStatusMod
 {
@@ -77,9 +79,25 @@ namespace MyStatusMod
                 bossVelocity = bossRb != null ? bossRb.velocity : Vector2.zero;
             }
 
+            Dictionary<string, bool> inputState = new Dictionary<string, bool>
+            {
+                { "left", Input.GetKey(KeyCode.LeftArrow) },
+                { "right", Input.GetKey(KeyCode.RightArrow) },
+                { "up", Input.GetKey(KeyCode.UpArrow) },
+                { "down", Input.GetKey(KeyCode.DownArrow) },
+                { "jump", Input.GetKey(KeyCode.Z) },
+                { "attack", Input.GetKey(KeyCode.X) },
+                { "dash", Input.GetKey(KeyCode.C) },
+                { "cast", Input.GetKey(KeyCode.V) },
+                { "superDash", Input.GetKey(KeyCode.Space) },
+                { "quickCast", Input.GetKey(KeyCode.F) },
+                { "dreamNail", Input.GetKey(KeyCode.D) },
+                { "quickMap", Input.GetKey(KeyCode.Tab) }
+            };
+
             // 更新状态
             server.UpdateStatus(hp, soul, bossHp, playerPos, playerSize, bossPos, bossSize,
-                                playerVelocity, bossVelocity, heroState);
+                                playerVelocity, bossVelocity, heroState, inputState);
         }
 
     }
@@ -97,6 +115,8 @@ namespace MyStatusMod
         private Vector2 playerVelocity;
         private Vector2 bossVelocity;
         private string heroFSMState;
+        private Dictionary<string, bool> input = new();
+
         public void Start()
         {
             listener = new HttpListener();
@@ -128,7 +148,7 @@ namespace MyStatusMod
 
         public void UpdateStatus(int hp, int soul, int bossHp, Vector3 playerPos, Vector2 playerSize,
                                 Vector3 bossPos, Vector2 bossSize, Vector2 playerVelocity, Vector2 bossVelocity,
-                                string heroFSMState)
+                                string heroFSMState, Dictionary<string, bool> inputState)
         {
             this.health = hp;
             this.soul = soul;
@@ -140,6 +160,7 @@ namespace MyStatusMod
             this.playerVelocity = playerVelocity;
             this.bossVelocity = bossVelocity;
             this.heroFSMState = heroFSMState;
+            this.input = inputState;
         }
 
         private string GetStatusJson()
@@ -149,32 +170,37 @@ namespace MyStatusMod
             {
                 return (float.IsNaN(value) || float.IsInfinity(value)) ? "0.00" : value.ToString("F2");
             }
-
+            
+            string inputJson = string.Join(",", input.Select(kvp =>
+                $"\"{kvp.Key}\":{(kvp.Value ? "true" : "false")}"
+            ));
+            
             return $"{{" +
-                $"\"health\":{health}," +
-                $"\"soul\":{soul}," +
-                $"\"bossHealth\":{bossHealth}," +
-                $"\"fsmState\":\"{heroFSMState}\"," +
-                $"\"player\":{{" +
-                    $"\"x\":{FormatFloat(playerPosition.x)}," +
-                    $"\"y\":{FormatFloat(playerPosition.y)}," +
-                    $"\"width\":{FormatFloat(playerSize.x)}," +
-                    $"\"height\":{FormatFloat(playerSize.y)}," +
-                    $"\"velocity\":{{" +
-                        $"\"x\":{FormatFloat(playerVelocity.x)}," +
-                        $"\"y\":{FormatFloat(playerVelocity.y)}" +
-                    $"}}" +
-                $"}}," +
-                $"\"boss\":{{" +
-                    $"\"x\":{FormatFloat(bossPosition.x)}," +
-                    $"\"y\":{FormatFloat(bossPosition.y)}," +
-                    $"\"width\":{FormatFloat(bossSize.x)}," +
-                    $"\"height\":{FormatFloat(bossSize.y)}," +
-                    $"\"velocity\":{{" +
-                        $"\"x\":{FormatFloat(bossVelocity.x)}," +
-                        $"\"y\":{FormatFloat(bossVelocity.y)}" +
-                    $"}}" +
+            $"\"health\":{health}," +
+            $"\"soul\":{soul}," +
+            $"\"bossHealth\":{bossHealth}," +
+            $"\"fsmState\":\"{heroFSMState}\"," +
+            $"\"player\":{{" +
+                $"\"x\":{FormatFloat(playerPosition.x)}," +
+                $"\"y\":{FormatFloat(playerPosition.y)}," +
+                $"\"width\":{FormatFloat(playerSize.x)}," +
+                $"\"height\":{FormatFloat(playerSize.y)}," +
+                $"\"velocity\":{{" +
+                    $"\"x\":{FormatFloat(playerVelocity.x)}," +
+                    $"\"y\":{FormatFloat(playerVelocity.y)}" +
                 $"}}" +
+            $"}}," +
+            $"\"boss\":{{" +
+                $"\"x\":{FormatFloat(bossPosition.x)}," +
+                $"\"y\":{FormatFloat(bossPosition.y)}," +
+                $"\"width\":{FormatFloat(bossSize.x)}," +
+                $"\"height\":{FormatFloat(bossSize.y)}," +
+                $"\"velocity\":{{" +
+                    $"\"x\":{FormatFloat(bossVelocity.x)}," +
+                    $"\"y\":{FormatFloat(bossVelocity.y)}" +
+                $"}}" +
+            $"}}," +
+            $"\"input\":{{{inputJson}}}" + // ! the last term should not have a comma
             $"}}";
         }
 

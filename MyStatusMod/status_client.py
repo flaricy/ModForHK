@@ -31,6 +31,10 @@ def fetch_status():
         print(f"Boss   Pos: ({boss.get('x', 0):.2f}, {boss.get('y', 0):.2f}) "
               f"Size: ({boss.get('width', 0):.2f}, {boss.get('height', 0):.2f}) "
               f"Vel: ({boss['velocity']['x']:.2f}, {boss['velocity']['y']:.2f})")
+        
+        input_state = data.get("input", {})
+        pressed_keys = [k for k, v in input_state.items() if v]
+        print(f"Keys Pressed: {pressed_keys}")
 
     except Exception as e:
         print("Error fetching status:", e)
@@ -39,4 +43,4 @@ if __name__ == "__main__":
     print("🔄 Polling Hollow Knight status server...")
     while True:
         fetch_status()
-        time.sleep(1.5)
+        time.sleep(0.4)

@@ -5,7 +5,7 @@ This project contains a Hollow Knight Mod and a Python client that together prov
 
 - Current Boss health
 
-- Player and Boss position (X, Y coordinates)
+- Player and Boss position (this is a global one), velocity
 
 - Player and Boss bounding box size (width and height)
 
@@ -52,10 +52,16 @@ python status_client.py
 
 ```yaml
 ============================================================
-[ 151.93 s] Hollow Knight Game Status
+[  19.92 s] Hollow Knight Game Status
+FSM State: Unknown
 Player HP: 9
 Player Soul: 0
-Boss HP: 920
-Player Pos: (29.54, 33.01) Size: (0.50, 1.28)
-Boss   Pos: (29.87, 28.23) Size: (1.75, 1.82)
+Boss HP: -1
+Player Pos: (118.39, 14.41) Size: (0.50, 1.28) Vel: (8.30, 0.00)
+Boss   Pos: (0.00, 0.00) Size: (0.00, 0.00) Vel: (0.00, 0.00)
+Keys Pressed: ['right']
 ```
+
+## Keyboard Binding 
+
+![alt text](image.png)
