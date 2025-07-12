@@ -9,7 +9,7 @@ namespace MyStatusMod
 {
     public class MyStatusMod : Mod
     {
-        public override string GetVersion() => "v1.1.3";
+        public override string GetVersion() => "v1.1.5";
         private StatusServer server;
 
         public override void Initialize()
@@ -30,9 +30,24 @@ namespace MyStatusMod
             Vector3 playerPos = HeroController.instance.transform.position;
             BoxCollider2D pc = HeroController.instance.GetComponent<BoxCollider2D>();
             Vector2 playerSize = pc != null ? pc.size : Vector2.zero;
+            Rigidbody2D rb = HeroController.instance.GetComponent<Rigidbody2D>();
+            Vector2 playerVelocity = rb != null ? rb.velocity : Vector2.zero;
+
+            string heroState = "Unknown"; // ! Problems here, which state describes the hero's current state?
+            // var fsms = HeroController.instance.GetComponents<PlayMakerFSM>();
+            // foreach (var fsm in fsms)
+            // {
+            //     // Log($"[FSM] Found: {fsm.FsmName} | Active State: {fsm.Fsm?.ActiveStateName}");
+            //     if (fsm.FsmName == "ProxyFSM")
+            //     {
+            //         heroState = fsm.Fsm.ActiveStateName;
+            //         break;
+            //     }
+            // }
 
             Vector3 bossPos = Vector3.zero;
             Vector2 bossSize = Vector2.zero;
+            Vector2 bossVelocity = Vector2.zero;
             int bossHp = -1;
 
             // 尝试识别 boss
@@ -57,10 +72,14 @@ namespace MyStatusMod
 
                 BoxCollider2D bc = currentBoss.GetComponent<BoxCollider2D>();
                 bossSize = bc != null ? bc.size : Vector2.zero;
+
+                Rigidbody2D bossRb = currentBoss.GetComponent<Rigidbody2D>();
+                bossVelocity = bossRb != null ? bossRb.velocity : Vector2.zero;
             }
 
             // 更新状态
-            server.UpdateStatus(hp, soul, bossHp, playerPos, playerSize, bossPos, bossSize);
+            server.UpdateStatus(hp, soul, bossHp, playerPos, playerSize, bossPos, bossSize,
+                                playerVelocity, bossVelocity, heroState);
         }
 
     }
@@ -75,6 +94,9 @@ namespace MyStatusMod
         private Vector2 playerSize;
         private Vector3 bossPosition;
         private Vector2 bossSize;
+        private Vector2 playerVelocity;
+        private Vector2 bossVelocity;
+        private string heroFSMState;
         public void Start()
         {
             listener = new HttpListener();
@@ -105,7 +127,8 @@ namespace MyStatusMod
         }
 
         public void UpdateStatus(int hp, int soul, int bossHp, Vector3 playerPos, Vector2 playerSize,
-                                Vector3 bossPos, Vector2 bossSize)
+                                Vector3 bossPos, Vector2 bossSize, Vector2 playerVelocity, Vector2 bossVelocity,
+                                string heroFSMState)
         {
             this.health = hp;
             this.soul = soul;
@@ -114,23 +137,45 @@ namespace MyStatusMod
             this.playerSize = playerSize;
             this.bossPosition = bossPos;
             this.bossSize = bossSize;
+            this.playerVelocity = playerVelocity;
+            this.bossVelocity = bossVelocity;
+            this.heroFSMState = heroFSMState;
         }
 
         private string GetStatusJson()
         {
+            // 帮助函数：避免 NaN/Infinity 导致 JSON 错误
+            string FormatFloat(float value)
+            {
+                return (float.IsNaN(value) || float.IsInfinity(value)) ? "0.00" : value.ToString("F2");
+            }
+
             return $"{{" +
                 $"\"health\":{health}," +
                 $"\"soul\":{soul}," +
                 $"\"bossHealth\":{bossHealth}," +
+                $"\"fsmState\":\"{heroFSMState}\"," +
                 $"\"player\":{{" +
-                    $"\"x\":{playerPosition.x:F2},\"y\":{playerPosition.y:F2}," +
-                    $"\"width\":{playerSize.x:F2},\"height\":{playerSize.y:F2}" +
+                    $"\"x\":{FormatFloat(playerPosition.x)}," +
+                    $"\"y\":{FormatFloat(playerPosition.y)}," +
+                    $"\"width\":{FormatFloat(playerSize.x)}," +
+                    $"\"height\":{FormatFloat(playerSize.y)}," +
+                    $"\"velocity\":{{" +
+                        $"\"x\":{FormatFloat(playerVelocity.x)}," +
+                        $"\"y\":{FormatFloat(playerVelocity.y)}" +
+                    $"}}" +
                 $"}}," +
                 $"\"boss\":{{" +
-                    $"\"x\":{bossPosition.x:F2},\"y\":{bossPosition.y:F2}," +
-                    $"\"width\":{bossSize.x:F2},\"height\":{bossSize.y:F2}" +
+                    $"\"x\":{FormatFloat(bossPosition.x)}," +
+                    $"\"y\":{FormatFloat(bossPosition.y)}," +
+                    $"\"width\":{FormatFloat(bossSize.x)}," +
+                    $"\"height\":{FormatFloat(bossSize.y)}," +
+                    $"\"velocity\":{{" +
+                        $"\"x\":{FormatFloat(bossVelocity.x)}," +
+                        $"\"y\":{FormatFloat(bossVelocity.y)}" +
+                    $"}}" +
                 $"}}" +
-                $"}}";
+            $"}}";
         }
 
         public void Stop()

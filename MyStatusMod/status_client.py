@@ -12,21 +12,25 @@ def fetch_status():
         health = data["health"]
         soul = data["soul"]
         boss_hp = data["bossHealth"]
+        fsm_state = data.get("fsmState", "Unknown")
 
         player = data.get("player", {})
         boss = data.get("boss", {})
 
         print("="*60)
         print(f"[{elapsed:7.2f} s] Hollow Knight Game Status")
+        print(f"FSM State: {fsm_state}")
         print(f"Player HP: {health}")
         print(f"Player Soul: {soul}")
         print(f"Boss HP: {boss_hp}")
 
         print(f"Player Pos: ({player.get('x', 0):.2f}, {player.get('y', 0):.2f}) "
-              f"Size: ({player.get('width', 0):.2f}, {player.get('height', 0):.2f})")
+              f"Size: ({player.get('width', 0):.2f}, {player.get('height', 0):.2f}) "
+              f"Vel: ({player['velocity']['x']:.2f}, {player['velocity']['y']:.2f})")
 
         print(f"Boss   Pos: ({boss.get('x', 0):.2f}, {boss.get('y', 0):.2f}) "
-              f"Size: ({boss.get('width', 0):.2f}, {boss.get('height', 0):.2f})")
+              f"Size: ({boss.get('width', 0):.2f}, {boss.get('height', 0):.2f}) "
+              f"Vel: ({boss['velocity']['x']:.2f}, {boss['velocity']['y']:.2f})")
 
     except Exception as e:
         print("Error fetching status:", e)

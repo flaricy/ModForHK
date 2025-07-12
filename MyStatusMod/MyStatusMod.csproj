@@ -45,6 +45,11 @@
         <HintPath>/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/UnityEngine.Physics2DModule.dll</HintPath>
         <Private>false</Private>
     </Reference>
+    <Reference Include="PlayMaker">
+        <HintPath>/Users/minyangyu/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/Contents/Resources/Data/Managed/PlayMaker.dll</HintPath>
+        <Private>false</Private>
+    </Reference>
+
   </ItemGroup>
 
   <ItemGroup>
